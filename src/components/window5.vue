@@ -21,16 +21,17 @@
 
 
 
-<script>
-import store from "../logic/store.js";
+<script lang="ts">
+import Vue from 'vue'
+import store from "../logic/store"
 
 import wndComponent from "./base.vue";
 
-export default {
+export default Vue.extend({
   components: {
     wndComponent
   },
-  data: function() {
+  data() {
     return {
       isVisibleWindow: true
     };
@@ -39,21 +40,21 @@ export default {
   store,
 
   methods: {
-    addWindow: function(title) {},
+    addWindow(title: string) {},
 
-    windowRequireInnerItem: function(callback) {
+    windowRequireInnerItem(callback: (el: HTMLElement) => void) {
       //�E�C���h�E1�ɓ��ׂ��v�f��ݒ�
 
-      callback(this.$refs.windowInner);
+      callback(this.$refs.windowInner as HTMLElement);
     },
 
-    buttonClicked: function(item) {
+    buttonClicked(item: { caption: string }) {
       //�����ꂽ�{�^����\������
 
       alert(`�����ꂽ�{�^���́u${item.caption}�v`);
     }
   }
-};
+})
 </script>
 
 <style scoped>

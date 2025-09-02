@@ -15,8 +15,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: "App",
   data() {
     return {
@@ -28,7 +30,7 @@ export default {
       this.message = "";
     }
   }
-};
+})
 </script>
 
 <style>

@@ -52,24 +52,19 @@
 
 
 
-<script>
-export default {
-  data: function() {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  data() {
     return {
-      wndID: 0,
-
-      x: null,
-
-      y: null,
-
+      wndID: 0 as number,
+      x: null as number | null,
+      y: null as number | null,
       cursorOffset: { x: 0, y: 0 },
-
-      cursorStartPos: null,
-
+      cursorStartPos: null as { x: number; y: number } | null,
       stateAtSizeChangeStarted: { width: 0, height: 0, cursorX: 0, cursorY: 0 },
-
       width: this.initialWidth,
-
       height: this.initialHeight
     };
   },
@@ -77,55 +72,47 @@ export default {
   props: {
     visible: {
       type: Boolean,
-
       default: true
     },
 
     caption: {
       type: String,
-
       default: ""
     },
 
     initialPosition: {
       type: Array,
-
       default: null
     },
 
     sizeChangeEnable: {
       type: Boolean,
-
       default: true
     },
 
     initialWidth: {
       type: Number,
-
       default: 0
     },
 
     initialHeight: {
       type: Number,
-
       default: 0
     },
 
     selectButtons: {
       type: Array,
-
       default: () => []
     },
 
     dialogMode: {
       type: Boolean,
-
       default: false
     }
   },
 
   computed: {
-    _visible: function() {
+    _visible(): boolean {
       if (this.visible) {
         this.$emit("opened");
       } else {
@@ -135,28 +122,28 @@ export default {
       return this.visible;
     },
 
-    _width: function() {
+    _width(): string {
       return this.width ? `${this.width}px` : "auto";
     },
 
-    _height: function() {
+    _height(): string {
       return this.height ? `${this.height}px` : "auto";
     },
 
-    _x: function() {
+    _x(): string {
       return `${this.x}px`;
     },
 
-    _y: function() {
+    _y(): string {
       return `${this.y}px`;
     },
 
-    zIndex: function() {
-      return this.$store.state.wndStatuses[this.wndID].zIndex || 0;
+    zIndex(): number {
+      return this.$store.state.wndStatuses[this.wndID]?.zIndex || 0;
     }
   },
 
-  created: function() {
+  created() {
     this.wndID = this.$store.state.wndCount;
 
     this.$store.dispatch("setWndStatuses", {
@@ -164,11 +151,9 @@ export default {
     });
   },
 
-  mounted: function() {
-    this.$emit("require-inner-item", el => {
-      this.$refs.wndInner.appendChild(el);
-
-      //�iv-show=false�̎��͗v�f�̍��������Ȃ��̂ŏ��������Ȃ��j
+  mounted() {
+    this.$emit("require-inner-item", (el: HTMLElement) => {
+      (this.$refs.wndInner as HTMLElement).appendChild(el);
 
       if (this.visible && this.$el) {
         this.setInitialState();
@@ -177,28 +162,20 @@ export default {
   },
 
   methods: {
-    //
-
-    //  Initialize
-
-    //
-
-    enter: function() {
+    enter() {
       this.setInitialState();
     },
 
-    setInitialState: function() {
-      //v-if�Ȃǂŗv�f���̂����Ȃ��ꍇ�͏����𒆒f
-
+    setInitialState() {
       if (!this.$el || !this.$refs.wndInner) return;
 
-      let buttonItemRect = null;
+      let buttonItemRect: DOMRect | null = null;
 
       if (this.selectButtons.length) {
-        buttonItemRect = this.$refs.buttonOuter.getBoundingClientRect();
+        buttonItemRect = (this.$refs.buttonOuter as HTMLElement).getBoundingClientRect();
       }
 
-      let innerItemRect = this.$refs.wndInner.getBoundingClientRect();
+      let innerItemRect = (this.$refs.wndInner as HTMLElement).getBoundingClientRect();
 
       this.width = this.initialWidth || innerItemRect.width;
 
@@ -209,80 +186,55 @@ export default {
           ? buttonItemRect.height
           : 0);
 
-      //���������ς�ł���Ώ�����I��
-
       if (this.x !== null && this.y !== null) return;
 
       if (this.initialPosition && this.initialPosition.length === 2) {
         this.x = this.initialPosition[0];
-
         this.y = this.initialPosition[1];
       } else {
-        this.x = window.innerWidth / 2 - this.$el.clientWidth / 2;
-
-        this.y = window.innerHeight / 2 - this.$el.clientHeight / 2;
+        this.x = window.innerWidth / 2 - (this.$el as HTMLElement).clientWidth / 2;
+        this.y = window.innerHeight / 2 - (this.$el as HTMLElement).clientHeight / 2;
       }
     },
 
-    //
-
-    //  Change position
-
-    //
-
-    mousedown: function(e) {
+    mousedown(e: MouseEvent) {
       this.cursorOffset.x = e.pageX;
-
       this.cursorOffset.y = e.pageY;
-
-      this.cursorStartPos = { x: this.x, y: this.y };
+      this.cursorStartPos = { x: this.x || 0, y: this.y || 0 };
 
       document.addEventListener("mousemove", this.mousemove);
-
       document.addEventListener("mouseup", this.mouseup);
 
       this.$store.dispatch("moveWndToTop", { wndID: this.wndID });
     },
 
-    mousemove: function(e) {
+    mousemove(e: MouseEvent) {
+      if (!this.cursorStartPos) return;
       this.x = this.cursorStartPos.x + (e.pageX - this.cursorOffset.x);
-
       this.y = this.cursorStartPos.y + (e.pageY - this.cursorOffset.y);
     },
 
-    mouseup: function(e) {
+    mouseup() {
       this.cursorStartPos = null;
-
       document.removeEventListener("mousemove", this.mousemove);
-
       document.removeEventListener("mouseup", this.mouseup);
     },
 
-    //
-
-    //  Resize window
-
-    //
-
-    startSizeChange: function(e) {
-      let wndRect = this.$el.getBoundingClientRect();
+    startSizeChange(e: MouseEvent) {
+      let wndRect = (this.$el as HTMLElement).getBoundingClientRect();
 
       this.stateAtSizeChangeStarted = {
         width: wndRect.width,
-
         height: wndRect.height,
-
         cursorX: e.pageX,
-
         cursorY: e.pageY
       };
 
       document.addEventListener("mousemove", this.whileSizeChange, false);
-
       document.addEventListener("mouseup", this.endSizeChange, false);
     },
 
-    whileSizeChange: function(e) {
+    whileSizeChange(e: MouseEvent) {
       this.width =
         this.stateAtSizeChangeStarted.width +
         e.pageX -
@@ -294,29 +246,21 @@ export default {
         this.stateAtSizeChangeStarted.cursorY;
     },
 
-    endSizeChange: function(e) {
+    endSizeChange() {
       document.removeEventListener("mousemove", this.whileSizeChange, false);
-
       document.removeEventListener("mouseup", this.endSizeChange, false);
     },
 
-    //
-
-    //  Buttons
-
-    //
-
-    buttonClicked: function(item) {
+    buttonClicked(item: { caption: string }) {
       this.$emit("button-clicked", item);
     },
 
-    closeButtonClicked: function() {
+    closeButtonClicked() {
       this.$emit("closed");
-
       this.$emit("update:visible", false);
     }
   }
-};
+})
 </script>
 
 

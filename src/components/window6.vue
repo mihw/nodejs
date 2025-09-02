@@ -20,27 +20,28 @@
 </template>
 
 
-<script>
-import wndComponent from "./window.vue";
-import helloworld from "./HelloWorld.vue";
+<script lang="ts">
+import Vue from 'vue'
+import wndComponent from "./window.vue"
+import helloworld from "./HelloWorld.vue"
 
-export default {
+export default Vue.extend({
   components: {
     wndComponent,
     helloworld
   },
-  data: function() {
+  data() {
     return {
       isVisibleWindow: true
     };
   },
 
   methods: {
-    windowRequireInnerItem: function(callback) {
-      callback(this.$refs.windowInner);
+    windowRequireInnerItem(callback: (el: HTMLElement) => void) {
+      callback(this.$refs.windowInner as HTMLElement);
     }
   }
-};
+})
 </script>
 
 

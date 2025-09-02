@@ -27,18 +27,19 @@
 </div>
 </template>
 
-<script>
-import store from "../logic/store.js";
+<script lang="ts">
+import Vue from 'vue'
+import store from "../logic/store"
 
 import wndComponent from "./base.vue";
 
 import axios from "axios";
-export default {
+export default Vue.extend({
   components: {
     wndComponent
   },
 
-  data: function() {
+  data() {
     return {
       isVisibleWindow: true
     };
@@ -47,37 +48,37 @@ export default {
   store,
 
   methods: {
-    clickYes: function() {
+    clickYes() {
       axios({
         method: "GET",
         url: "http://localhost:3000/users",
         headers: { "Content-Type": "text/plain; charset=utf-8" },
-        validateStatus: function(status) {
+        validateStatus: function(status: number) {
           return status > 0;
         }
       })
-        .then(function(response) {
+        .then(function(response: any) {
           console.log(response);
           alert("e1-" + response.data);
         })
-        .catch(function(error) {
+        .catch(function(error: any) {
           console.log(error);
           alert("e2-" + error + " " + error.status + " " + error.code);
         });
     },
-    clickNo: function() {
+    clickNo() {
       alert("no");
       this.isVisibleWindow = false;
     },
-    windowRequireInnerItem: function(callback) {
-      callback(this.$refs.windowInner);
+    windowRequireInnerItem(callback: (el: HTMLElement) => void) {
+      callback(this.$refs.windowInner as HTMLElement);
     },
 
-    buttonClicked: function(item) {
+    buttonClicked(item: { caption: string }) {
       alert("this is a test {{item.caption}}");
     }
   }
-};
+})
 </script>
 
 

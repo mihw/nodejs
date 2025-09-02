@@ -10,7 +10,8 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import window1 from "./window1.vue";
 import window2 from "./window2.vue";
 import window3 from "./window3.vue";
@@ -18,7 +19,7 @@ import window4 from "./window4.vue";
 import window5 from "./window5.vue";
 import window6 from "./window6.vue";
 
-export default {
+export default Vue.extend({
   components: {
     w1: window1,
     w2: window2,
@@ -28,17 +29,17 @@ export default {
     w6: window6
   },
 
-  data: function() {
+  data() {
     return {
       list: []
     };
   },
   methods: {
-    addWindow: function(title) {
+    addWindow(title: string) {
       this.list.push(title);
     }
   }
-};
+})
 </script>
 
 

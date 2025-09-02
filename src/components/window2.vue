@@ -24,17 +24,18 @@
 </div>
 </template>
 
-<script>
-import store from "../logic/store.js";
+<script lang="ts">
+import Vue from 'vue'
+import store from "../logic/store"
 
 import wndComponent from "./base.vue";
 
-export default {
+export default Vue.extend({
   components: {
     wndComponent
   },
 
-  data: function() {
+  data() {
     return {
       isVisibleWindow: true
     };
@@ -43,19 +44,19 @@ export default {
   store,
 
   methods: {
-    windowRequireInnerItem: function(callback) {
-      //ƒEƒCƒ“ƒhƒE1‚É“à•ï‚·‚×‚«—v‘f‚ğİ’è
+    windowRequireInnerItem(callback: (el: HTMLElement) => void) {
+      //ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½E1ï¿½É“ï¿½ï¿½ï‚·ï¿½×‚ï¿½ï¿½vï¿½fï¿½ï¿½İ’ï¿½
 
-      callback(this.$refs.windowInner);
+      callback(this.$refs.windowInner as HTMLElement);
     },
 
-    buttonClicked: function(item) {
-      //‰Ÿ‚³‚ê‚½ƒ{ƒ^ƒ“‚ğ•\¦‚·‚é
+    buttonClicked(item: { caption: string }) {
+      //ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-      alert(`‰Ÿ‚³‚ê‚½ƒ{ƒ^ƒ“‚Íu${item.caption}v`);
+      alert(`ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½{ï¿½^ï¿½ï¿½ï¿½Íu${item.caption}ï¿½v`);
     }
   }
-};
+})
 </script>
 
 

@@ -68,17 +68,12 @@
 
 
 
-<script>
-
-
-
-import store from "../logic/store.js"
-
+<script lang="ts">
+import Vue from 'vue'
+import store from "../logic/store"
 import wndComponent from "./wnd.vue"
 
-
-
-export default {
+export default Vue.extend({
 
     components: {
 
@@ -86,7 +81,7 @@ export default {
 
     },
 
-    data: function () {
+    data() {
 
         return {
 
@@ -104,31 +99,31 @@ export default {
 
     methods: {
 
-        window1RequireInnerItem: function(callback){
+        window1RequireInnerItem(callback: (el: HTMLElement) => void) {
 
             //�E�C���h�E1�ɓ��ׂ��v�f��ݒ�
 
-            callback(this.$refs.window1Inner);
+            callback(this.$refs.window1Inner as HTMLElement);
 
         },
 
-        window2RequireInnerItem: function(callback){
+        window2RequireInnerItem(callback: (el: HTMLElement) => void) {
 
             //�E�C���h�E2�ɓ��ׂ��v�f��ݒ�
 
-            callback(this.$refs.window2Inner);
+            callback(this.$refs.window2Inner as HTMLElement);
 
         },
 
-        window3RequireInnerItem: function(callback){
+        window3RequireInnerItem(callback: (el: HTMLElement) => void) {
 
             //�E�C���h�E3�ɓ��ׂ��v�f��ݒ�
 
-            callback(this.$refs.window3Inner);
+            callback(this.$refs.window3Inner as HTMLElement);
 
         },
 
-        buttonClicked: function(item) {
+        buttonClicked(item: { caption: string }) {
 
             //�����ꂽ�{�^����\������
 
@@ -138,10 +133,7 @@ export default {
 
     },
 
-}
-
-
-
+})
 </script>
 
 

@@ -27,31 +27,32 @@
 </template>
 
 
-<script>
+<script lang="ts">
 import wndComponent from "./window.vue";
-import script from "../logic/script.js";
+import Vue from 'vue'
+import script from "../logic/script"
 
-export default {
+export default Vue.extend({
   mixins: [script],
   components: {
     wndComponent
   },
-  data: function() {
+  data() {
     return {
       isVisibleWindow: true
     };
   },
 
   methods: {
-    windowRequireInnerItem: function(callback) {
-      callback(this.$refs.windowInner);
+    windowRequireInnerItem(callback: (el: HTMLElement) => void) {
+      callback(this.$refs.windowInner as HTMLElement);
     },
 
-    buttonClicked: function(item) {
+    buttonClicked(item: { caption: string }) {
       alert("this is a test ${item.caption} {{item.caption}}");
     }
   }
-};
+})
 </script>
 
 
